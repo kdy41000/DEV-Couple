@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="calendarquery">
+	<resultMap type="calendarDto" id="mycalendar">
+		<result property="title" column="TITLE"/>
+		<result property="start" column="STARTDATE"/>
+	</resultMap>
+	<select id="selectList" resultMap="mycalendar">
+		SELECT TITLE, STARTDATE FROM CALENDAR
+	</select>
+	<insert id="insertCalendar" parameterType="calendarDto">
+		INSERT INTO CALENDAR
+		VALUES(#{title},#{start})
+	</insert>
+	<delete id="deleteCalendar" parameterType="calendarDto">
+		DELETE FROM CALENDAR
+		WHERE TITLE=#{title}
+	</delete>
+	<select id="selectOne" resultMap="mycalendar" parameterType="calendarDto">
+		SELECT * FROM CALENDAR
+		WHERE TITLE=#{title}
+	</select>
+	<update id="updateCalendar" parameterType="calendarDto">
+		UPDATE CALENDAR
+		SET TITLE=#{title},STARTDATE=#{start}
+		WHERE TITLE=#{existtitle}
+	</update>
+</mapper>

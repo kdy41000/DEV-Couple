@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="letterquery">
+	<select id="selectNewLetter" resultType="letterDto" parameterType="String">
+		SELECT *
+		FROM
+		(SELECT ROWNUM
+     	 , B.*
+  	 	 FROM (SELECT A.*
+           	   FROM TESTLETTER A  
+           	   WHERE A.LETTERREAD = 1 AND A.ID = #{id}        	   
+           	   ORDER BY A.LETTERSEQ DESC) B)
+		WHERE ROWNUM = 1
+	</select>
+	<select id="LetterGettotalpage" resultType="Integer" parameterType="String">
+		SELECT COUNT(*) AS TOTALPAGE FROM TESTLETTER
+		WHERE ID = #{id}
+	</select>
+	<select id="selectGetLetterList" resultType="letterDto" parameterType="letterpagingDto">
+		SELECT B.*	
+		FROM (SELECT A.*, ROWNUM AS RNUM
+		FROM (SELECT * FROM TESTLETTER
+		  WHERE ID=#{id}
+		  ORDER BY LETTERTIME DESC) A) B	
+		WHERE RNUM BETWEEN #{startseq} AND #{endseq}  
+		ORDER BY RNUM ASC
+	</select>
+	<update id="updateReadStatus" parameterType="int">
+		UPDATE TESTLETTER
+		SET LETTERREAD = 2
+		WHERE LETTERSEQ = #{letterseq}
+	</update>
+	<select id="selectDetailLetter" resultType="letterDto" parameterType="int">
+		SELECT * FROM TESTLETTER
+		WHERE LETTERSEQ=#{letterseq}
+	</select>
+	<insert id="insertLetter" parameterType="letterdto">
+		INSERT INTO TESTLETTER
+		VALUES(TESTLETTERSEQ.NEXTVAL,#{id},#{sender},#{lettertitle},#{lettercontent},1,sysdate)
+	</insert>
+	<select id="LetterSenttotalpage" resultType="Integer" parameterType="String">
+		SELECT COUNT(*) AS TOTALPAGE FROM TESTLETTER
+		WHERE SENDER = #{id}
+	</select>
+	<select id="selectSentLetterList" resultType="letterDto" parameterType="letterpagingDto">
+		SELECT B.*	
+		FROM (SELECT A.*, ROWNUM AS RNUM
+		FROM (SELECT * FROM TESTLETTER
+		  WHERE SENDER=#{id}
+		  ORDER BY SENDER,LETTERTIME DESC) A) B	
+		WHERE RNUM BETWEEN #{startseq} AND #{endseq}  
+		ORDER BY RNUM ASC
+	</select>
+	<delete id="deleteLetter" parameterType="int">
+		DELETE FROM TESTLETTER
+		WHERE LETTERSEQ = #{letterseq}
+	</delete>
+</mapper>

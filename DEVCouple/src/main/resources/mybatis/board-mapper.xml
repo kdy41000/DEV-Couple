@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="boardquery">
+	<select id="totalpage" resultType="int">
+		SELECT COUNT(*) AS TOTALPAGE FROM TESTBOARD
+	</select>
+	<select id="selectList" resultType="boardDto" parameterType="pagingDto">
+		SELECT B.*
+		FROM (SELECT A.*, ROWNUM AS RNUM
+		FROM (SELECT * FROM TESTBOARD ORDER BY SEQ DESC) A) B
+		WHERE RNUM BETWEEN #{startseq} AND #{endseq}
+	</select>
+	<select id="totalpageId" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM TESTBOARD
+		WHERE ID LIKE '%'||#{inputval}||'%'
+	</select>
+	<select id="searchIdList" resultType="boardDto" parameterType="pagingDto">
+		SELECT B.*
+		FROM (SELECT A.*, ROWNUM AS RNUM
+		FROM (SELECT * FROM TESTBOARD WHERE ID LIKE '%'||#{inputval}||'%' ORDER BY SEQ DESC) A) B
+		WHERE RNUM BETWEEN #{startseq} AND #{endseq}
+	</select>
+	<select id="totalpageTitle" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM TESTBOARD
+		WHERE TITLE LIKE '%'||#{inputval}||'%'
+	</select>
+	<select id="searchTitleList" resultType="boardDto" parameterType="pagingDto">
+		SELECT B.*
+		FROM (SELECT A.*, ROWNUM AS RNUM
+		FROM (SELECT * FROM TESTBOARD WHERE TITLE LIKE '%'||#{inputval}||'%' ORDER BY SEQ DESC) A) B
+		WHERE RNUM BETWEEN #{startseq} AND #{endseq}
+	</select>
+	<update id="updatecnt" parameterType="int">
+		UPDATE TESTBOARD
+		SET CNT = 
+		(SELECT CNT+1 FROM TESTBOARD A WHERE A.SEQ = #{seq})
+		WHERE SEQ = #{seq}
+	</update>
+	<select id="selectOne" resultType="boardDto" parameterType="int">
+		SELECT * FROM TESTBOARD
+		WHERE SEQ = #{seq}
+	</select>
+	<insert id="insertBoard" parameterType="boardDto">
+		INSERT INTO TESTBOARD
+		VALUES(TESTBOARDSEQ.NEXTVAL,#{id},#{title},#{content},sysdate,0)
+	</insert>
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM TESTBOARD
+		WHERE SEQ = #{seq}
+	</delete>
+	<update id="updateBoard" parameterType="boardDto">
+		UPDATE TESTBOARD
+		SET TITLE = #{title},CONTENT = #{content}
+		WHERE SEQ = #{seq}
+	</update>
+	<select id="selectRecentReplyList" resultType="boardDto" parameterType="int">
+		SELECT * FROM REPLYBOARD INNER JOIN TESTMEMBER ON REPLYBOARD.WRITER = TESTMEMBER.ID
+		WHERE REPLYBOARD.SEQ = #{seq}
+		ORDER BY REPLYBOARD.REPLYSEQ DESC
+	</select>
+	<delete id="deleteReply" parameterType="int">
+		DELETE FROM REPLYBOARD
+		WHERE REPLYSEQ = #{replyseq}
+	</delete>
+	<insert id="insertReple" parameterType="boardDto">
+		INSERT INTO REPLYBOARD
+		VALUES(REPLYBOARDSEQ.NEXTVAL,#{seq},#{writer},#{replycontent},#{replydate},#{star})
+	</insert>
+	<select id="selectReple" resultType="boardDto" parameterType="int">
+		SELECT * FROM REPLYBOARD
+		INNER JOIN TESTMEMBER ON REPLYBOARD.WRITER = TESTMEMBER.ID
+		WHERE SEQ=#{seq}
+	</select>
+	<select id="selectAllPoi" resultType="boardDto">
+		SELECT * FROM TESTBOARD
+		ORDER BY SEQ DESC
+	</select>
+</mapper>

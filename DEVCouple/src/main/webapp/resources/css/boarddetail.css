@@ -1,0 +1,119 @@
+@charset "UTF-8";
+
+.replytextarea{
+	border-radius:10px; 
+	resize:none;
+}
+
+.replywritebtn{
+	width:100px; 
+	height:100px; 
+	float: right; 
+	margin: -5.5% 40% 0% 0%; 
+	background: #551A8B;
+    color: white;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #551A8B;
+    cursor:pointer;
+}
+
+#backlistbtn{
+	width:6%; 
+	height:35px; 
+	border-radius:10px; 
+	background:#e6799e; 
+	color:white; 
+	font-weight:bold; 
+	float: right;
+    margin: 0.7% 15% 0% 0%; 
+    cursor:pointer; 
+    border:1px solid #e6799e;
+}
+
+#revisedetailbtn{
+	width:3%;
+	margin-left:70%; 
+	cursor:pointer;
+}
+
+#deletedetailbtn{
+	width:3%;
+	margin-left:1%;
+	cursor:pointer;
+}
+/*
+.rightfontcontent{
+	margin: -2.5% 0% 0% 68.5%;
+	color:#7f7f7f;
+}
+
+.movefont{
+	margin-left:83.5%; 
+	color:#7f7f7f;
+}
+*/
+.currentdetailtitle{
+	font-weight:bold;
+	color:#7f7f7f;
+}
+
+.movelink{
+	color:#7f7f7f;
+}
+/*
+.replycontents{
+	margin:2% 0% 0% 15%; 
+	background:#f7f7f7; 
+	padding:10px; 
+	width:44%; 
+	height: 55px;
+	border-radius:10px;
+}
+*/
+.writtenpersonimg{
+	width:50px; 
+	height:50px; 
+	border-radius:50%; 
+	border:1px solid pink; 
+	margin-top:0.8%;
+	float:left;
+}
+
+.writtenid{
+	margin: 0% 0% 0% 3%;
+    float: left;
+}
+/*
+.writtencontent{
+	float: left;
+    margin: 3.5% 0% 0% -28%;
+}
+*/
+.starloc{
+	margin-left: 52%; 
+	margin-top: -3%;
+}
+
+.star{
+	width:3%;
+}
+
+.selectstar{
+	cursor:pointer;
+	width:3%;
+}
+
+.selectedstar{
+	width:3%;
+	margin-bottom: -0.5%;
+    margin-left: 10%;
+    cursor:no-drop;
+}
+
+.deletereplybtn{
+	cursor:pointer;
+	width:2%; 
+	float:right; 
+	margin:-1.5% 37% 0% 0%;
+}

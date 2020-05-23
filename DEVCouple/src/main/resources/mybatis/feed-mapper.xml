@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="feedquery">
+	<select id="selectList" resultType="feedDto">
+		SELECT * FROM FEED INNER JOIN TESTMEMBER ON FEED.ID = TESTMEMBER.ID
+		ORDER BY FEEDNO DESC
+	</select>
+	<insert id="insertAllFeed" parameterType="feedDto">
+		INSERT INTO FEED
+		VALUES(FEEDSEQ.NEXTVAL,#{id},#{img,jdbcType=VARCHAR},#{video, jdbcType=VARCHAR},#{content, jdbcType=VARCHAR},sysdate)
+	</insert>
+	<delete id="deletefeed" parameterType="Integer">
+		DELETE FROM FEED
+		WHERE FEEDNO=#{feedno}
+	</delete>
+	<insert id="insertComment" parameterType="feedDto">
+		INSERT INTO FEEDCOMMENT
+		VALUES(FEEDCOMMENTSEQ.NEXTVAL,#{feedno},#{reid},#{recomment},sysdate)
+	</insert>
+	<select id="selectComment" resultType="feedDto" parameterType="Integer">
+		SELECT * FROM
+		(SELECT ROWNUM,FEEDCOMMENT.*,TESTMEMBER.* FROM FEEDCOMMENT 
+		INNER JOIN FEED ON FEEDCOMMENT.FEEDNO = FEED.FEEDNO INNER JOIN TESTMEMBER ON FEEDCOMMENT.REID = TESTMEMBER.ID
+		WHERE FEEDCOMMENT.FEEDNO=#{feedno}
+		ORDER BY FEEDCOMMENT.RENO DESC) A
+		WHERE ROWNUM = 1
+	</select>
+	<select id="selectCommentList" resultType="feedDto">
+		SELECT * FROM FEEDCOMMENT INNER JOIN TESTMEMBER ON FEEDCOMMENT.REID = TESTMEMBER.ID
+		ORDER BY FEEDCOMMENT.FEEDNO DESC,FEEDCOMMENT.RENO DESC
+	</select>
+	<delete id="deleteMycomment" parameterType="Integer">
+		DELETE FROM FEEDCOMMENT
+		WHERE RENO = #{reno}
+	</delete>
+	<select id="selectCommentCountList" resultType="feedDto">
+		SELECT A.FEEDNO, NVL(CNT,0) COMMENTCOUNT
+		FROM FEED A
+				,(
+				SELECT COUNT(RECOMMENT) CNT,FEEDNO
+				FROM FEEDCOMMENT
+				GROUP BY FEEDNO) B
+		WHERE A.FEEDNO = B.FEEDNO(+)		
+	</select>
+	<select id="selectLikeCountList" resultType="feedDto">
+		SELECT A.FEEDNO, NVL(CNT,0) LIKECOUNT
+		FROM FEED A
+				,(
+				SELECT COUNT(LIKESTATUS) CNT, FEEDNO
+				FROM LIKETABLE
+				GROUP BY LIKESTATUS,FEEDNO
+				HAVING LIKESTATUS = 1) B
+		WHERE A.FEEDNO = B.FEEDNO(+)
+	</select>
+	<select id="selectLikeStatus" resultType="feedDto" parameterType="feedDto">
+		SELECT * FROM LIKETABLE WHERE FEEDNO = #{feedno} AND LIKEID = #{likeid}
+	</select>
+	<insert id="insertNewlikestatus" parameterType="feedDto">
+		INSERT INTO LIKETABLE
+		VALUES(LIKETABLESEQ.NEXTVAL,#{feedno},#{likeid},1)
+	</insert>
+	<update id="updatelikegoodstatus" parameterType="feedDto">
+		UPDATE LIKETABLE
+		SET LIKESTATUS = 1
+		WHERE FEEDNO = #{feedno} AND LIKEID = #{likeid}
+	</update>
+	<update id="updatelikebadstatus" parameterType="feedDto">
+		UPDATE LIKETABLE
+		SET LIKESTATUS = 0
+		WHERE FEEDNO = #{feedno} AND LIKEID = #{likeid}
+	</update>
+	<select id="selectComparableLikeStatus" resultType="feedDto" parameterType="String">
+		SELECT FEEDNO,LIKEID,LIKESTATUS FROM LIKETABLE
+		WHERE LIKEID = #{likeid}
+	</select>
+</mapper>

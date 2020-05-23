@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+.typewrite{ color:black; text-decoration: none;}
+
+.applytitle{
+	font-family: 'Hi Melody', cursive;
+	font-family: 'Nanum Pen Script', cursive;
+	font-family: 'Single Day', cursive;
+	font-family: 'Sunflower', sans-serif;
+	font-size:30px;
+}
+
+#applytypewriter{
+	font-family: 'Hi Melody', cursive;
+	font-family: 'Nanum Pen Script', cursive;
+	font-family: 'Single Day', cursive;
+	font-family: 'Sunflower', sans-serif;
+	font-size:20px;
+}
+
+.applycontent{
+	font-family: 'Hi Melody', cursive;
+	font-family: 'Nanum Pen Script', cursive;
+	font-family: 'Single Day', cursive;
+	font-family: 'Sunflower', sans-serif;
+	font-size:20px;
+}
+
+@media (min-width: 480px) and (max-width: 1024px){
+	.mobilescreen{
+		display:show;
+	}
+	.webscreen{
+		display:none;
+	}
+}
+@media (min-width: 1025px){
+	.mobilescreen{
+		display:none;
+	}
+	.webscreen{
+		display:show;
+	}
+}

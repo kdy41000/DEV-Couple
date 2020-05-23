@@ -1,0 +1,5 @@
+----서버등록 유의사항
+1. image 파일 경로 바꾸기 
+		"root/apache-tomcat-9.0.33/webapps/DEVCouple/src/main/webapp/resources/images/profileimgstorage";
+		 
+2. websocket ip 를 서버 ip로 잡기

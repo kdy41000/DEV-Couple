@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.mvc.prectice.signup.dto.SignupDto" alias="signupDto"/>
+		<typeAlias type="com.mvc.prectice.letter.dto.LetterDto" alias="letterDto"/>
+		<typeAlias type="com.mvc.prectice.login.dto.LoginDto" alias="loginDto"/>
+		<typeAlias type="com.mvc.prectice.board.dto.BoardDto" alias="boardDto"/>
+		<typeAlias type="com.mvc.prectice.board.dto.PagingDto" alias="pagingDto"/>
+		<typeAlias type="com.mvc.prectice.chat.dto.ChatDto" alias="chatDto"/>
+		<typeAlias type="com.mvc.prectice.letter.dto.LetterPagingDto" alias="letterpagingDto"/>
+		<typeAlias type="com.mvc.prectice.aboutme.dto.AboutmeDto" alias="aboutmeDto"/>
+		<typeAlias type="com.mvc.prectice.mypage.dto.MypageDto" alias="mypageDto"/>
+		<typeAlias type="com.mvc.prectice.calendar.dto.CalendarDto" alias="calendarDto"/>
+		<typeAlias type="com.mvc.prectice.feed.dto.FeedDto" alias="feedDto"/>
+	</typeAliases>
+	
+    <mappers>
+     	<mapper resource="/mybatis/signup-mapper.xml"/>
+     	<mapper resource="/mybatis/letter-mapper.xml"/>
+     	<mapper resource="/mybatis/login-mapper.xml"/>
+     	<mapper resource="/mybatis/board-mapper.xml"/>
+     	<mapper resource="/mybatis/chat-mapper.xml"/>
+     	<mapper resource="/mybatis/aboutme-mapper.xml"/>
+     	<mapper resource="/mybatis/mypage-mapper.xml"/>
+     	<mapper resource="/mybatis/calendar-mapper.xml"/>
+        <mapper resource="/mybatis/feed-mapper.xml"/>
+    </mappers>
+    <!-- resource : src/main/resources 를 뜻한다. -->
+  
+</configuration>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="aboutmequery">
+	<select id="selectOne" resultType="aboutmeDto" parameterType="String">
+		SELECT * FROM ABOUTME INNER JOIN TESTMEMBER ON ABOUTME.ID = TESTMEMBER.ID
+		WHERE ABOUTME.ID = #{id}
+	</select>
+	<insert id="insertAboutme" parameterType="aboutmeDto">
+		INSERT INTO ABOUTME
+		VALUES(ABOUTMESEQ.NEXTVAL,#{id},#{site},#{certification},#{content})
+	</insert>
+	<update id="updateAboutme" parameterType="aboutmeDto">
+		UPDATE ABOUTME
+		SET SITE = #{site},CERTIFICATION = #{certification},CONTENT = #{content}
+		WHERE ID = #{id}
+	</update>
+	<delete id="deleteAboutme" parameterType="int">
+		DELETE FROM ABOUTME
+		WHERE SEQ = #{seq}
+	</delete>
+</mapper>

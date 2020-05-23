@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="chatquery">
+	<select id="selectChatList" resultType="chatDto">
+		SELECT * FROM CHATROOM INNER JOIN CHATSTATUS ON CHATROOM.ROOMNO = CHATSTATUS.ROOMNO
+		INNER JOIN TESTMEMBER ON CHATSTATUS.ID = TESTMEMBER.ID
+		WHERE CHATSTATUS.CONNECTSTATUS = 1 AND CHATSTATUS.GRADE = 1
+		ORDER BY CHATSTATUS.ROOMNO DESC
+	</select>
+	<insert id="insertRoom" parameterType="chatDto">
+		INSERT INTO CHATROOM
+		VALUES(CHATROOMSEQ.NEXTVAL,#{roomname},#{roomdescription},sysdate)
+	</insert>
+	<select id="selectRoomNo" resultType="chatDto" parameterType="chatDto">
+		SELECT * FROM CHATROOM
+		WHERE ROOMNAME = #{roomname} AND ROOMDESCRIPTION = #{roomdescription}
+	</select>
+	<insert id="insertMasterInfo" parameterType="hashmap">
+		INSERT INTO CHATSTATUS
+		VALUES(CHATSTATUSSEQ.NEXTVAL,1,#{roomno},#{id},1)
+	</insert>
+	<select id="selectRoomDetail" resultType="chatDto" parameterType="int">
+		SELECT * FROM CHATROOM
+		WHERE ROOMNO = #{roomno}
+	</select>
+	<select id="selectExistUser" resultType="Integer" parameterType="chatDto">
+		SELECT COUNT(*) FROM CHATSTATUS
+		WHERE ID=#{id} AND ROOMNO=#{roomno}
+	</select>
+	<insert id="InsertUserInfo" parameterType="chatDto">
+		INSERT INTO CHATSTATUS
+		VALUES(CHATSTATUSSEQ.NEXTVAL,1,#{roomno},#{id},2)
+	</insert>
+	<update id="updateUserInfo" parameterType="chatDto">
+		UPDATE CHATSTATUS
+		SET CONNECTSTATUS = 1
+		WHERE ROOMNO=#{roomno} AND ID = #{id}
+	</update>
+	<select id="selectConnectUser" resultType="chatDto" parameterType="int">
+		SELECT * FROM CHATSTATUS INNER JOIN TESTMEMBER ON CHATSTATUS.ID = TESTMEMBER.ID
+		WHERE CHATSTATUS.CONNECTSTATUS = 1 AND CHATSTATUS.ROOMNO=#{roomno}
+		ORDER BY CHATSTATUS.STATUSNO DESC
+	</select>
+	<select id="SearchUser" resultType="chatDto" parameterType="hashmap">
+		SELECT * FROM CHATSTATUS
+		WHERE ROOMNO=#{roomno} AND ID LIKE '%'||#{searchval}||'%'
+	</select>
+	<update id="exitRoom" parameterType="chatDto">
+		UPDATE CHATSTATUS
+		SET CONNECTSTATUS = 0
+		WHERE ID = #{id} AND ROOMNO = #{roomno}
+	</update>
+	<delete id="deleteRoom" parameterType="int">
+		DELETE FROM CHATROOM
+		WHERE ROOMNO = #{roomno}
+	</delete>
+	<select id="selectUserProfile" resultType="chatDto" parameterType="chatDto">
+		SELECT * FROM CHATROOM INNER JOIN CHATSTATUS ON CHATROOM.ROOMNO = CHATSTATUS.ROOMNO INNER JOIN TESTMEMBER ON CHATSTATUS.ID = TESTMEMBER.ID
+		WHERE CHATSTATUS.ROOMNO = #{roomno} AND CHATSTATUS.ID = #{id}
+	</select>
+	<select id="selectOnlyUserImg" resultType="chatDto" parameterType="String">
+		SELECT * FROM TESTMEMBER
+		WHERE ID={username}
+	</select>
+	<insert id="insertChat" parameterType="chatDto">
+		INSERT INTO CHATMSG
+		VALUES(CHATMSGSEQ.NEXTVAL,#{roomno},#{write_id},#{msg},#{sendtime})
+	</insert>
+	<select id="selectLastMsgno" resultType="Integer" parameterType="int">
+		 SELECT ROWNUM
+     	 FROM (SELECT A.* 
+      	 FROM CHATMSG A
+		 WHERE ROOMNO = #{roomno}
+	     ORDER BY SENDTIME DESC) B
+       	 WHERE ROWNUM = 1
+	</select>
+	<select id="selectRecentMsg" resultType="chatDto" parameterType="hashmap">
+	    SELECT *     
+     	FROM(SELECT ROWNUM AS rnum, B.*
+         	 FROM (SELECT * 
+          		  FROM CHATMSG A INNER JOIN TESTMEMBER 
+          		  				ON A.WRITE_ID = TESTMEMBER.ID
+       			  WHERE A.ROOMNO = #{roomno}
+        		  ORDER BY SENDTIME DESC) B )
+       	 WHERE rnum BETWEEN #{rownum} AND #{rownum}+11
+	</select>
+	<select id="selectYourImg" resultType="String" parameterType="String">
+		SELECT PROFILEIMG FROM TESTMEMBER
+		WHERE id=#{id}
+	</select>
+</mapper>
